@@ -150,7 +150,7 @@ hist(sumsteps.i$steps,
      xlab = "Steps per day") 
 ```
 
-![plot of chunk imputed histogram](figs/imputed histogram-1.png)
+![plot of chunk imputed.histogram](figs/imputed.histogram-1.png)
 
 Fourth, calculate the mean and median of the imputed data. 
 

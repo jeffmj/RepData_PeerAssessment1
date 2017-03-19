@@ -130,7 +130,7 @@ imputed$steps[nas] <- interval.step.average$steps[
 
 Third, create a histogram of the total number of steps per day from this new dataframe, and compare it to the original data.
 
-``` {r imputed histogram} 
+``` {r imputed.histogram} 
 #calculate total steps per day
 
 sumsteps.i <- aggregate(steps ~ date, imputed, sum)

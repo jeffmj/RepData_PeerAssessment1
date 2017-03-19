@@ -7,7 +7,7 @@ output: html_document
 
 
 ```r
-knitr::opts_chunk$set(echo = TRUE,fig.path='Figs/')
+knitr::opts_chunk$set(echo = TRUE,fig.path='figs/')
 ```
 
 ## Reproducible Research, Course Project 1
@@ -57,7 +57,7 @@ hist(sumsteps$steps,
      xlab = "Steps per day") 
 ```
 
-![plot of chunk histogram](Figs/histogram-1.png)
+![plot of chunk histogram](figs/histogram-1.png)
 
 Now calculate the mean and median number of steps per day
 
@@ -94,7 +94,7 @@ plot(interval.step.average$interval,interval.step.average$steps,
      main = "Steps per Interval, Averaged over all the days")
 ```
 
-![plot of chunk plotdaily](Figs/plotdaily-1.png)
+![plot of chunk plotdaily](figs/plotdaily-1.png)
 
 Third, determine which interval has on average the highest number of steps.
 
@@ -150,7 +150,7 @@ hist(sumsteps.i$steps,
      xlab = "Steps per day") 
 ```
 
-![plot of chunk imputed histogram](Figs/imputed histogram-1.png)
+![plot of chunk imputed histogram](figs/imputed histogram-1.png)
 
 Fourth, calculate the mean and median of the imputed data. 
 
@@ -205,7 +205,7 @@ ggplot(interval.dow,
        facet_wrap(~ days, ncol = 1, nrow=2)
 ```
 
-![plot of chunk weekday.weekend](Figs/weekday.weekend-1.png)
+![plot of chunk weekday.weekend](figs/weekday.weekend-1.png)
 
 Note that on weekends this person was less active early in the day, slightly more active during the day, and more active later at night on average that when compared to weekdays.
 

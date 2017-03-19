@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=TRUE}
-knitr::opts_chunk$set(echo = TRUE,fig.path='Figs/')
+knitr::opts_chunk$set(echo = TRUE,fig.path='figs/')
 ```
 
 ## Reproducible Research, Course Project 1

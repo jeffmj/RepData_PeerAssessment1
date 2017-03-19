@@ -5,7 +5,8 @@ date: "March 17, 2017"
 output: html_document
 ---
 
-```{r setup, include=TRUE}
+
+```r
 knitr::opts_chunk$set(echo = TRUE,fig.path='Figs/')
 ```
 
@@ -17,7 +18,8 @@ This is my report answering the questions as posed by the assignment for course 
 
 The following code checks to see if the data has already been downloaded, and if not, downloads it. 
 
-```{r data}
+
+```r
 ## set wd 
 
 setwd("~/R/Coursera/ReproducibleResearch")
@@ -31,20 +33,21 @@ if(!file.exists("activity.csv")){      #if not there, go get it
 
 ## Load file. 
 activity <- read.csv("activity.csv")
-
 ```
 
 ### Step 2: Look at the number of steps per day
 
 To do this we need to sum up the steps per day. 
 
-```{r total.steps}
+
+```r
 #calculate total steps per day
 
 sumsteps <- aggregate(steps ~ date, activity, sum)
 ```
 Then we are asked to create a histogram of steps per day.
-```{r histogram}
+
+```r
 #create histogram of steps per day
 
 hist(sumsteps$steps,
@@ -52,20 +55,22 @@ hist(sumsteps$steps,
      breaks = 20,
      main = "Total Steps per Day",
      xlab = "Steps per day") 
-  
 ```
+
+![plot of chunk histogram](Figs/histogram-1.png)
 
 Now calculate the mean and median number of steps per day
 
-```{r mean.median.per.day}
+
+```r
 # calculate mean and median steps per day, ignoring NA values
 
 mean.day <- mean(sumsteps$steps)                      # mean of steps per day  
 median.day <- median(sumsteps$steps)                  # median of steps per dayplot
 ```
-Mean = `r format(mean.day, big.mark=",", scientific=FALSE) `.
+Mean = 10,766.19.
 
-Median = `r format(median.day, big.mark=",", scientific=FALSE)`.
+Median = 10,765.
 
 ### Step 3: Look at the activity patterns in the daily data
 
@@ -73,32 +78,32 @@ For this, we are going to create a time series plot of each 5 minute interval in
 
 First, calculate the average steps per 5 minute interval.
 
-``` {r interval.step.average}
 
+```r
 interval.step.average <- aggregate(steps ~ interval, activity, mean)
-
 ```
 
 Second, plot the results. 
 
-``` {r plotdaily}
+
+```r
 plot(interval.step.average$interval,interval.step.average$steps, 
      type ="l", 
      xlab = "Interval",
      ylab = "Steps",
      main = "Steps per Interval, Averaged over all the days")
-
 ```
+
+![plot of chunk plotdaily](Figs/plotdaily-1.png)
 
 Third, determine which interval has on average the highest number of steps.
 
-``` {r  max.interval}
 
+```r
 max.interval <- interval.step.average[which.max(interval.step.average$steps),1]
-
 ```
 
-Interval `r max.interval `(8:35 am) has the highest mean number of steps. 
+Interval 835(8:35 am) has the highest mean number of steps. 
 
 ###Step 4: Impute the missing Values.
 
@@ -106,12 +111,13 @@ A number of the rows in the provided dataset have missing values, denoted by NA.
 
 First, how  many NA values are there in the data?
 
-``` {r missing values}
+
+```r
 missing <- sum(is.na(activity$steps))
 total <- length(activity$steps)
 ```
 
-There are `r missing ` intervals in the dataset with NA values out of a total of `r total ` intervals.
+There are 2304 intervals in the dataset with NA values out of a total of 17568 intervals.
 
 Second, devise a strategy for filling in (imputing) the missing values. 
 
@@ -119,18 +125,18 @@ I propose using the mean for any given interval, as averaged over all the days i
 
 This code creates a new dataframe ("Imputed") where the NA values are substituted for the NA values.
 
-``` {r imputed}
 
+```r
 imputed <- activity                           # make copy of dataset
 nas <- is.na(imputed$steps)                   # make vector of rows with NA values
 imputed$steps[nas] <- interval.step.average$steps[
   match(imputed$interval[nas],interval.step.average$interval)]  # replace NA values with mean for that interval
-
 ```
 
 Third, create a histogram of the total number of steps per day from this new dataframe, and compare it to the original data.
 
-``` {r imputed histogram} 
+
+```r
 #calculate total steps per day
 
 sumsteps.i <- aggregate(steps ~ date, imputed, sum)
@@ -142,23 +148,23 @@ hist(sumsteps.i$steps,
      breaks = 20,
      main = "Total Steps per Day, with Imputed Data",
      xlab = "Steps per day") 
-
 ```
+
+![plot of chunk imputed histogram](Figs/imputed histogram-1.png)
 
 Fourth, calculate the mean and median of the imputed data. 
 
-```{r mean.median.per.day.imputed }
 
+```r
 # calculate mean and median steps per day, ignoring NA values
 
 mean.day.i <- mean(sumsteps.i$steps)                      # mean of steps per day  
 median.day.i <- median(sumsteps.i$steps)                  # median of steps per dayplot
-
 ```
 
-Mean of imputed data = `r format(mean.day.i, big.mark=",", scientific=FALSE) `.
+Mean of imputed data = 10,766.19.
 
-Median of imputed data = `r format(median.day.i, big.mark=",", scientific=FALSE)`.
+Median of imputed data = 10,766.19.
 
 Interestingly, for the imputed data, the mean and median are the same, and equal to the mean in the original data. The histogram is "steeper"; by that I mean that the days with more steps happen more often, as you would expect if you added steps everywhere there were intervals with NA.  
 
@@ -166,7 +172,8 @@ Interestingly, for the imputed data, the mean and median are the same, and equal
 
 First, split the data into two sets, weekdays and weekends.
 
-``` {r day.of.week}
+
+```r
 #copy the data
 
 days.imputed <- imputed
@@ -176,13 +183,12 @@ days <- ifelse(weekdays(as.Date(imputed$date))=="Saturday"|weekdays(as.Date(impu
 
 #add day of the week to data
 days.imputed <- cbind(imputed,days)
-
 ```
   
 Now aggregate that data by Weekday/Weekend over intervals, and plot the result in 2 panel plot. 
 
-``` {r weekday.weekend}
 
+```r
 interval.dow <- aggregate(steps ~ interval + days, days.imputed, mean) 
 
 #load ggplot2
@@ -197,8 +203,9 @@ ggplot(interval.dow,
        geom_line() +
        labs(title = "Ave Daily Steps Weekday vs. Weekend", x = "Interval", y = "Total Number of Steps") +
        facet_wrap(~ days, ncol = 1, nrow=2)
-
 ```
+
+![plot of chunk weekday.weekend](Figs/weekday.weekend-1.png)
 
 Note that on weekends this person was less active early in the day, slightly more active during the day, and more active later at night on average that when compared to weekdays.
 
